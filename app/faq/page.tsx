@@ -33,7 +33,7 @@ const faqs = [
   {
     question: "Does the card expire?",
     answer:
-      "Each card is valid for one year from the date of purchase. Check the card and each restaurant's terms for details.",
+      "Yes. Each card is valid until the expiration date printed on the card. Check the card and each restaurant's terms for details.",
   },
   {
     question: "How do I buy a card?",

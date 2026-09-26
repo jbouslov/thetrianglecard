@@ -32,7 +32,7 @@ export const products: Product[] = [
       "11 participating local restaurants (with more being added)",
       "Reusable coupons — use them again and again",
       "Supports independent restaurants in the Triangle",
-      "Valid for a full year",
+      "Valid through the expiration date printed on the card",
       "The perfect local gift",
     ],
   },
