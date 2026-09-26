@@ -11,9 +11,9 @@ export default function AboutPage() {
   return (
     <>
       <section className="bg-ink py-16 text-white">
-        <div className="container-page">
+        <div className="container-page text-center">
           <h1 className="font-serif text-4xl font-bold">About Us</h1>
-          <p className="mt-4 max-w-2xl text-lg text-white/70">
+          <p className="mx-auto mt-4 max-w-2xl text-lg text-white/70">
             Supporting local restaurants across {site.area}, one card at a time.
           </p>
         </div>
