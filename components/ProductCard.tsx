@@ -25,7 +25,7 @@ export default function AddToCart({ product }: { product: Product }) {
       onClick={handleAdd}
       className="inline-flex items-center justify-center rounded-md bg-gold px-6 py-3 text-base font-semibold text-ink transition-colors hover:bg-gold-dark focus:outline-none focus:ring-2 focus:ring-gold focus:ring-offset-2"
     >
-      {added ? "Added to cart ✓" : `Add to Cart — $${product.price}`}
+      {added ? "Added to cart ✓" : `Add to Cart - $${product.price}`}
     </button>
   );
 }

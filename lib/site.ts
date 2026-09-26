@@ -13,8 +13,7 @@ export const site = {
   area: "Cary, Apex & Morrisville, NC",
   price: 20,
 
-  // TODO: replace with your real contact email before launch.
-  contactEmail: "info@buildingstore.ca",
+  contactEmail: "thetrianglecard@gmail.com",
 
   // Optional — leave as empty string to hide a social link in the footer.
   social: {

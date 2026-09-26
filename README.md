@@ -75,25 +75,42 @@ address — you don't have to build map links yourself.
 
 ---
 
-## The cart & checkout
+## The cart & checkout (real payments via Stripe)
 
-The cart is fully functional: visitors can add the card, change the quantity,
-and see the total. The cart is saved in the browser so it survives a refresh.
+The cart is fully functional (add, change quantity, see total, saved across
+refreshes) and **checkout charges real money through Stripe Checkout**. When a
+customer clicks **Checkout**, the site creates a Stripe Checkout session
+(`app/api/checkout/route.ts`) and redirects them to Stripe's secure hosted
+payment page. After paying they land on `/success`, which clears their cart.
 
-**Checkout is currently a placeholder** — clicking "Checkout" shows a
-"coming soon / contact us" message. When you're ready to accept real online
-payments, everything is set up for a clean drop-in:
+Prices are always taken from `lib/products.ts` on the server — the client can't
+tamper with them.
 
-1. Look at `handleCheckout()` in `app/cart/page.tsx` — there's a commented
-   example showing exactly what to replace it with.
-2. Create an API route at `app/api/checkout/route.ts` that creates a payment
-   session (e.g. [Stripe Checkout](https://stripe.com/docs/checkout/quickstart))
-   from the cart `items` and returns a redirect URL.
-3. Add your payment provider keys as environment variables in Vercel
-   (Project → Settings → Environment Variables).
+### To turn payments on you need a Stripe key
 
-No cart code needs to change — the cart already carries everything the checkout
-endpoint needs.
+1. Create a free account at <https://dashboard.stripe.com>.
+2. Get your **secret key** at <https://dashboard.stripe.com/apikeys>
+   (use `sk_test_...` for testing, `sk_live_...` when you're ready for real
+   money).
+3. **Locally:** copy `.env.example` to `.env.local` and paste your key into
+   `STRIPE_SECRET_KEY`. Restart `npm run dev`.
+4. **On Vercel:** Project → **Settings → Environment Variables** → add
+   `STRIPE_SECRET_KEY` with your key (and redeploy).
+
+Until a key is set, the Checkout button politely tells customers to email you
+instead — nothing breaks.
+
+### Test it
+
+With a `sk_test_...` key, use Stripe's test card `4242 4242 4242 4242`, any
+future expiry, any CVC, any ZIP. Real cards only work once you switch to your
+live key.
+
+### Physical card / shipping
+
+The card is a physical item, so checkout collects a US shipping address and
+phone number. If you only do local pickup, remove the
+`shipping_address_collection` block in `app/api/checkout/route.ts`.
 
 ---
 

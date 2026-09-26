@@ -22,9 +22,9 @@ export const restaurants: Restaurant[] = [
   {
     name: "Papa John's Pizza",
     cuisine: "Pizza",
-    address: "6470 Tryon Rd",
+    address: "10236 Green Level Church Rd, Ste 103",
     city: "Cary",
-    zip: "27518",
+    zip: "27519",
     offer: "40% off menu items",
   },
   {

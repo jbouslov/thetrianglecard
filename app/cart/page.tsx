@@ -8,27 +8,42 @@ import { useCart } from "@/components/CartProvider";
 export default function CartPage() {
   const { items, updateQuantity, removeItem, subtotal, count, clear } = useCart();
   const [message, setMessage] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  // ---------------------------------------------------------------------------
-  // CHECKOUT SEAM
-  // For now this is a placeholder. When you're ready to accept real payments,
-  // replace the body of this function with a call to your payment backend, e.g.:
-  //
-  //   const res = await fetch("/api/checkout", {
-  //     method: "POST",
-  //     headers: { "Content-Type": "application/json" },
-  //     body: JSON.stringify({ items }),
-  //   });
-  //   const { url } = await res.json();
-  //   window.location.href = url; // redirect to Stripe Checkout
-  //
-  // The cart state above (items, subtotal, count) already has everything the
-  // checkout endpoint needs — no other changes required.
-  // ---------------------------------------------------------------------------
-  function handleCheckout() {
-    setMessage(
-      `Online checkout is coming soon! To purchase now, email us at ${site.contactEmail} and we'll get your card to you.`
-    );
+  // Sends the cart to our /api/checkout route, which creates a Stripe Checkout
+  // session and returns its URL. We then redirect the customer to Stripe's
+  // secure hosted payment page.
+  async function handleCheckout() {
+    setMessage(null);
+    setLoading(true);
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          items: items.map((i) => ({ id: i.id, quantity: i.quantity })),
+        }),
+      });
+      const data = await res.json();
+
+      if (res.ok && data.url) {
+        window.location.href = data.url; // go to Stripe Checkout
+        return;
+      }
+
+      if (res.status === 503) {
+        // Payments not configured yet — fall back to a contact message.
+        setMessage(
+          `Online checkout isn't live yet. To purchase now, email us at ${site.contactEmail} and we'll get your card to you.`
+        );
+      } else {
+        setMessage(data.error || "Something went wrong. Please try again.");
+      }
+    } catch {
+      setMessage("Network error. Please check your connection and try again.");
+    } finally {
+      setLoading(false);
+    }
   }
 
   if (count === 0) {
@@ -118,8 +133,13 @@ export default function CartPage() {
             <span>${subtotal}</span>
           </div>
 
-          <button type="button" onClick={handleCheckout} className="btn-gold mt-6 w-full">
-            Checkout
+          <button
+            type="button"
+            onClick={handleCheckout}
+            disabled={loading}
+            className="btn-gold mt-6 w-full disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {loading ? "Redirecting to checkout…" : "Checkout"}
           </button>
 
           {message && (
