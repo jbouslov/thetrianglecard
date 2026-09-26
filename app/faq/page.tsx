@@ -45,9 +45,9 @@ export default function FAQPage() {
   return (
     <>
       <section className="bg-ink py-16 text-white">
-        <div className="container-page">
+        <div className="container-page text-center">
           <h1 className="font-serif text-4xl font-bold">Frequently Asked Questions</h1>
-          <p className="mt-4 max-w-2xl text-lg text-white/70">
+          <p className="mx-auto mt-4 max-w-2xl text-lg text-white/70">
             Everything you need to know about The Triangle Card.
           </p>
         </div>
